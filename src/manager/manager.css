@@ -30,7 +30,48 @@ body {
 
 .speeds { margin-left: auto; font-variant-numeric: tabular-nums; }
 
-.top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.top-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+.server-select {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 28px 6px 12px;
+  color: var(--text);
+  max-width: 180px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%2378716c' d='M1 1l5 5 5-5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+}
+
+.server-select.ok {
+  background-color: var(--ok-soft);
+  border-color: color-mix(in srgb, var(--ok) 30%, transparent);
+  color: var(--ok);
+}
+
+.server-select.bad {
+  background-color: var(--danger-soft);
+  border-color: color-mix(in srgb, var(--danger) 30%, transparent);
+  color: var(--danger);
+}
+
+@media (prefers-color-scheme: dark) {
+  .server-select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23a8a29e' d='M1 1l5 5 5-5'/></svg>");
+  }
+
+  .task-actions .icon-btn[data-action="pause"]:hover {
+    background: color-mix(in srgb, #facc15 22%, var(--surface));
+    border-color: #facc15;
+    color: #facc15;
+  }
+}
 
 .tabs {
   display: flex;
@@ -76,7 +117,7 @@ body {
 
 .task {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 88px 110px 72px;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 12px;
   align-items: center;
   padding: 12px 14px;
@@ -109,10 +150,55 @@ body {
 .task-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 2px;
 }
 
-.task-actions .btn { padding: 4px 8px; font-size: 12px; }
+.task-actions .icon-btn {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  padding: 0;
+}
+
+.task-actions .icon-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+
+.task-actions .icon-btn[data-action="pause"]:hover {
+  background: color-mix(in srgb, #ca8a04 20%, var(--surface));
+  border-color: #ca8a04;
+  color: #ca8a04;
+}
+
+.task-actions .icon-btn[data-action="unpause"]:hover {
+  background: var(--ok-soft);
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
+.task-actions .icon-btn[data-action="stop-seeding"]:hover {
+  background: color-mix(in srgb, var(--muted) 22%, var(--surface));
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.task-actions .icon-btn[data-action="retry"]:hover {
+  background: var(--ok-soft);
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
+.task-actions .icon-btn[data-action="remove"]:hover {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+  color: var(--danger);
+}
 
 .empty {
   padding: 48px 24px;
@@ -140,6 +226,14 @@ body {
 
 .files { list-style: none; padding: 0; margin: 0; font-size: 12px; }
 .files li { padding: 4px 0; border-bottom: 1px solid var(--line); word-break: break-all; }
+
+.files label {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.files input { margin-top: 3px; }
 
 dialog {
   border: 1px solid var(--line);

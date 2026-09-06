@@ -19,24 +19,12 @@
 
       <form id="form">
         <section>
-          <h2>RPC server</h2>
-          <div class="grid">
-            <label>Profile name <input name="name" type="text" required /></label>
-            <label>Protocol
-              <select name="protocol">
-                <option value="http">http</option>
-                <option value="https">https</option>
-              </select>
-            </label>
-            <label>Host <input name="host" type="text" required /></label>
-            <label>Port <input name="port" type="number" min="1" max="65535" required /></label>
-            <label>RPC path <input name="path" type="text" required /></label>
-            <label>Secret <input name="secret" type="password" autocomplete="off" /></label>
-          </div>
-          <p id="insecure" class="warn" hidden></p>
+          <h2>RPC servers</h2>
+          <p class="muted">Captured downloads go to the active server, chosen in the manager dropdown. Up to 5 servers.</p>
+          <div id="servers"></div>
           <div class="row">
-            <button class="btn" id="test" type="button">Test connection</button>
-            <span id="test-result" class="muted"></span>
+            <button class="btn" id="add-server" type="button">Add server</button>
+            <span id="add-server-note" class="muted"></span>
           </div>
         </section>
 

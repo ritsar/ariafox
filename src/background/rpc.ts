@@ -172,6 +172,10 @@ export class Aria2Client {
     return this.call("aria2.purgeDownloadResult");
   }
 
+  changeOption(gid: string, options: Record<string, string>) {
+    return this.call("aria2.changeOption", [gid, options]);
+  }
+
   tellStatus(gid: string) {
     return this.call<Aria2Task>("aria2.tellStatus", [gid, [...TASK_KEYS]]);
   }

@@ -77,6 +77,12 @@ const en = {
   notifyRestored: "aria2 is unreachable; Firefox is downloading {name}",
   unknownTask: "Download",
   seeding: "Seeding",
+  stopSeeding: "Stop seeding",
+  ratio: "Ratio",
+  applyFiles: "Apply file selection",
+  addServer: "Add server",
+  removeServer: "Remove",
+  maxServers: "Maximum of 5 servers.",
 } as const;
 
 export type MessageKey = keyof typeof en;

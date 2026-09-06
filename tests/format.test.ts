@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { displayStatus, isSeeding } from "../src/shared/format.ts";
+import { displayStatus, formatRatio, isSeeding } from "../src/shared/format.ts";
 import type { Aria2Task } from "../src/shared/types.ts";
 
 test("detects seeding from aria2 seeder flag", () => {
@@ -36,4 +36,16 @@ test("does not treat an unfinished torrent as seeding", () => {
   } as Aria2Task;
   assert.equal(isSeeding(task), false);
   assert.equal(displayStatus(task), "active");
+});
+
+test("formats share ratio", () => {
+  assert.equal(
+    formatRatio({
+      gid: "4",
+      status: "active",
+      totalLength: "1000",
+      uploadLength: "1500",
+    } as Aria2Task),
+    "1.50",
+  );
 });

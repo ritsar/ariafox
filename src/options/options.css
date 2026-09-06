@@ -64,6 +64,23 @@ input, select, textarea {
 
 .row { margin-top: 12px; }
 
+.server-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: var(--bg);
+}
+
+.server-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
 @media (max-width: 640px) {
   .grid { grid-template-columns: 1fr; }
 }

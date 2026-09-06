@@ -5,11 +5,13 @@ import { RpcError, clientFrom } from "./rpc.js";
 import {
   DEFAULT_SETTINGS,
   loadSettings,
+  profileSummaries,
   saveSettings,
 } from "../shared/settings.js";
 import type {
   ExtensionMessage,
   ExtensionResponse,
+  RpcProfile,
   Settings,
   Snapshot,
 } from "../shared/types.js";
@@ -28,6 +30,8 @@ function emptySnapshot(): Snapshot {
     captureEnabled: settings.capture.enabled,
     stat: null,
     tasks: { active: [], waiting: [], stopped: [] },
+    activeProfileId: settings.activeProfileId,
+    profiles: profileSummaries(settings),
   };
 }
 
@@ -50,6 +54,8 @@ async function refreshSnapshot(): Promise<Snapshot> {
       captureEnabled: settings.capture.enabled,
       stat: data.stat,
       tasks: data.tasks,
+      activeProfileId: settings.activeProfileId,
+      profiles: profileSummaries(settings),
     };
   } catch (error) {
     lastSnapshot.error = error instanceof Error ? error.message : String(error);
@@ -123,6 +129,17 @@ async function sendUrls(uris: string[], referrer?: string): Promise<void> {
   await refreshSnapshot().then(broadcast);
 }
 
+function clientFor(profile: RpcProfile) {
+  const profiles = settings.profiles.some((item) => item.id === profile.id)
+    ? settings.profiles.map((item) => (item.id === profile.id ? profile : item))
+    : [...settings.profiles, profile];
+  return clientFrom({
+    ...settings,
+    activeProfileId: profile.id,
+    profiles,
+  });
+}
+
 async function retryTask(gid: string): Promise<void> {
   const status = await client.tellStatus(gid);
   const uris = (status.files ?? []).flatMap((file) =>
@@ -161,8 +178,9 @@ async function handleMessage(
       restartPoll();
       return settings;
     case "testConnection": {
-      const version = await client.getVersion();
-      const stat = await client.getGlobalStat();
+      const rpc = message.profile ? clientFor(message.profile) : client;
+      const version = await rpc.getVersion();
+      const stat = await rpc.getGlobalStat();
       return { version: version.version, stat };
     }
     case "getSnapshot":
@@ -176,6 +194,16 @@ async function handleMessage(
       restartPoll();
       await refreshSnapshot().then(broadcast);
       return settings.capture.enabled;
+    case "setActiveProfile": {
+      if (!settings.profiles.some((profile) => profile.id === message.id)) {
+        throw new RpcError("Unknown server");
+      }
+      settings = { ...settings, activeProfileId: message.id };
+      await saveSettings(settings);
+      await refreshSettings();
+      restartPoll();
+      return settings.activeProfileId;
+    }
     case "pause":
       await client.pause(message.gid);
       return refreshSnapshot();
@@ -185,6 +213,18 @@ async function handleMessage(
     case "remove":
       await removeTask(message.gid, message.queue);
       return refreshSnapshot();
+    case "stopSeeding":
+      await client.pause(message.gid);
+      return refreshSnapshot();
+    case "selectFiles": {
+      if (message.indexes.length === 0) {
+        throw new RpcError("Select at least one file");
+      }
+      await client.changeOption(message.gid, {
+        "select-file": message.indexes.join(","),
+      });
+      return refreshSnapshot();
+    }
     case "pauseAll":
       await client.pauseAll();
       return refreshSnapshot();

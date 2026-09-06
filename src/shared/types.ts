@@ -86,6 +86,8 @@ export type Snapshot = {
   captureEnabled: boolean;
   stat: Aria2GlobalStat | null;
   tasks: Record<QueueName, Aria2Task[]>;
+  activeProfileId: string;
+  profiles: Array<{ id: string; name: string; url: string; label: string }>;
 };
 
 export type RpcProfile = {
@@ -122,12 +124,15 @@ export type Settings = {
 export type ExtensionMessage =
   | { type: "getSettings" }
   | { type: "saveSettings"; settings: Settings }
-  | { type: "testConnection" }
+  | { type: "testConnection"; profile?: RpcProfile }
   | { type: "getSnapshot" }
   | { type: "toggleCapture" }
+  | { type: "setActiveProfile"; id: string }
   | { type: "pause"; gid: string }
   | { type: "unpause"; gid: string }
   | { type: "remove"; gid: string; queue: QueueName }
+  | { type: "stopSeeding"; gid: string }
+  | { type: "selectFiles"; gid: string; indexes: number[] }
   | { type: "pauseAll" }
   | { type: "unpauseAll" }
   | { type: "purgeStopped" }

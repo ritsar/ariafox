@@ -13,6 +13,7 @@
   --ok: #0f766e;
   --ok-soft: #ccfbf1;
   --warn: #b45309;
+  --warn-soft: #fef3c7;
   --danger: #b91c1c;
   --danger-soft: #fee2e2;
   --shadow: 0 10px 30px rgb(28 25 23 / 8%);
@@ -36,6 +37,7 @@
     --ok: #2dd4bf;
     --ok-soft: #134e4a;
     --warn: #fbbf24;
+    --warn-soft: #451a03;
     --danger: #f87171;
     --danger-soft: #450a0a;
     --shadow: 0 12px 40px rgb(0 0 0 / 35%);

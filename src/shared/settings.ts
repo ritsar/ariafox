@@ -1,5 +1,7 @@
 import type { CaptureSettings, RpcProfile, Settings } from "./types.js";
 
+export const MAX_PROFILES = 5;
+
 export const DEFAULT_PROFILE_ID = "default";
 
 export const DEFAULT_PROFILE: RpcProfile = {
@@ -61,17 +63,18 @@ export function mergeSettings(raw: unknown): Settings {
         }),
       )
     : structuredClone(DEFAULT_SETTINGS.profiles);
+  const limited = profiles.slice(0, MAX_PROFILES);
   const captureRaw = isObject(raw.capture) ? raw.capture : {};
   const notificationsRaw = isObject(raw.notifications) ? raw.notifications : {};
   const activeProfileId =
     typeof raw.activeProfileId === "string" &&
-    profiles.some((profile) => profile.id === raw.activeProfileId)
+    limited.some((profile) => profile.id === raw.activeProfileId)
       ? raw.activeProfileId
-      : profiles[0]?.id ?? DEFAULT_PROFILE_ID;
+      : limited[0]?.id ?? DEFAULT_PROFILE_ID;
 
   return {
     activeProfileId,
-    profiles: profiles.length > 0 ? profiles : structuredClone(DEFAULT_SETTINGS.profiles),
+    profiles: limited.length > 0 ? limited : structuredClone(DEFAULT_SETTINGS.profiles),
     capture: {
       enabled: Boolean(captureRaw.enabled),
       minSizeBytes:
@@ -113,6 +116,14 @@ export function mergeSettings(raw: unknown): Settings {
   };
 }
 
+export function newProfile(index: number): RpcProfile {
+  return {
+    ...DEFAULT_PROFILE,
+    id: crypto.randomUUID(),
+    name: `Server ${index}`,
+  };
+}
+
 export function activeProfile(settings: Settings): RpcProfile {
   return (
     settings.profiles.find((profile) => profile.id === settings.activeProfileId) ??
@@ -124,6 +135,34 @@ export function activeProfile(settings: Settings): RpcProfile {
 export function rpcHttpUrl(profile: RpcProfile): string {
   const path = profile.path.replace(/^\/+/, "");
   return `${profile.protocol}://${profile.host}:${profile.port}/${path}`;
+}
+
+export function rpcDisplayUrl(profile: Pick<RpcProfile, "protocol" | "host" | "port">): string {
+  return `${profile.protocol}://${profile.host}:${profile.port}`;
+}
+
+export function profileLabel(profile: Pick<RpcProfile, "name" | "protocol" | "host" | "port">): string {
+  const url = rpcDisplayUrl(profile);
+  const name = profile.name.trim();
+  return name && name.toLowerCase() !== profile.host.toLowerCase()
+    ? `${name} · ${url}`
+    : url;
+}
+
+export type ProfileSummary = {
+  id: string;
+  name: string;
+  url: string;
+  label: string;
+};
+
+export function profileSummaries(settings: Settings): ProfileSummary[] {
+  return settings.profiles.map((profile) => ({
+    id: profile.id,
+    name: profile.name,
+    url: rpcDisplayUrl(profile),
+    label: profileLabel(profile),
+  }));
 }
 
 export function isLoopbackHost(host: string): boolean {

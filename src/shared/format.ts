@@ -39,9 +39,19 @@ export function isSeeding(task: Aria2Task): boolean {
   return torrent && percentComplete(task) >= 100 && toNumber(task.totalLength) > 0;
 }
 
+export function isTorrentTask(task: Aria2Task): boolean {
+  return Boolean(task.bittorrent || task.infoHash);
+}
+
 export function displayStatus(task: Aria2Task): string {
   if (isSeeding(task)) return "seeding";
   return task.status;
+}
+
+export function formatRatio(task: Aria2Task): string {
+  const total = toNumber(task.totalLength);
+  if (total <= 0) return "";
+  return (toNumber(task.uploadLength) / total).toFixed(2);
 }
 
 export function formatEta(task: Aria2Task): string {
