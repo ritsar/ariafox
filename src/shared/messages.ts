@@ -1,0 +1,95 @@
+const en = {
+  extName: "AriaFox",
+  connected: "Connected",
+  disconnected: "Disconnected",
+  captureOn: "Capture on",
+  captureOff: "Capture off",
+  openManager: "Open manager",
+  openOptions: "Settings",
+  pauseAll: "Pause all",
+  resumeAll: "Resume all",
+  addTask: "Add",
+  addTaskTitle: "Add download",
+  addUrlsLabel: "URLs or magnet links",
+  addUrlsHint: "One per line",
+  addTorrentLabel: "Torrent file",
+  addFilenameLabel: "Filename (optional)",
+  addSubmit: "Start download",
+  addCancel: "Cancel",
+  queueActive: "Active",
+  queueWaiting: "Waiting",
+  queueStopped: "Stopped",
+  emptyActive: "No active downloads",
+  emptyWaiting: "Nothing waiting",
+  emptyStopped: "No stopped downloads",
+  notConnectedTitle: "Not connected to aria2",
+  notConnectedBody:
+    "Open settings and check the RPC host, port, and secret. aria2 must be running with JSON-RPC enabled.",
+  pause: "Pause",
+  resume: "Resume",
+  remove: "Remove",
+  retry: "Retry",
+  detailTitle: "Task",
+  detailGid: "GID",
+  detailStatus: "Status",
+  detailDir: "Directory",
+  detailError: "Error",
+  detailFiles: "Files",
+  detailConnections: "Connections",
+  speedDown: "Down",
+  speedUp: "Up",
+  clearStopped: "Clear stopped",
+  rpcHost: "Host",
+  rpcPort: "Port",
+  rpcPath: "RPC path",
+  rpcProtocol: "Protocol",
+  rpcSecret: "Secret",
+  rpcName: "Profile name",
+  testConnection: "Test connection",
+  save: "Save",
+  saved: "Saved",
+  connectionOk: "Connected to aria2 {version}",
+  captureSection: "Download capture",
+  captureEnabled: "Send browser downloads to aria2",
+  capturePdf: "Capture PDFs",
+  capturePrivate: "Capture in private windows",
+  captureMinSize: "Skip files smaller than (bytes)",
+  captureExtensions: "Skip file extensions (comma-separated)",
+  captureGlobs: "Skip URL patterns (one glob per line)",
+  capturePageGlobs: "Skip page (referrer) patterns",
+  captureCookiesHint:
+    "Firefox will ask to access data for all websites. That is only so AriaFox can attach cookies to captured downloads. It does not read your tabs, and nothing is sent anywhere except your aria2 server.",
+  captureSitesGranted: "Website access granted for cookie forwarding.",
+  captureSitesDenied: "Website access was not granted. Capture is on, but cookies will not be sent.",
+  connectionOkNext: "Connected to aria2 {version}. You can enable download capture below.",
+  notifyCapture: "Notify when a download is captured",
+  notifyErrors: "Notify on capture or RPC errors",
+  torrentUpload: "Upload .torrent bytes to aria2 (instead of the URL)",
+  insecureRpc:
+    "This RPC URL is not on localhost and uses HTTP. Anyone on the network may see the secret and cookies AriaFox sends.",
+  firstRun: "AriaFox does not include aria2. Point it at your RPC server to get started.",
+  menuSendLink: "Send link to aria2",
+  menuSendSelection: "Send selection to aria2",
+  menuSendMedia: "Send media to aria2",
+  menuSendPage: "Send page URL to aria2",
+  notifyCaptured: "Sent to aria2: {name}",
+  notifyCaptureFailed: "Could not send to aria2: {error}",
+  notifyRestored: "aria2 is unreachable; Firefox is downloading {name}",
+  unknownTask: "Download",
+  seeding: "Seeding",
+} as const;
+
+export type MessageKey = keyof typeof en;
+
+export function t(
+  key: MessageKey,
+  vars?: Record<string, string | number>,
+): string {
+  let value: string = en[key];
+  if (vars) {
+    for (const [name, replacement] of Object.entries(vars)) {
+      value = value.replaceAll(`{${name}}`, String(replacement));
+    }
+  }
+  return value;
+}

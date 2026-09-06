@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AriaFox</title>
+    <link rel="stylesheet" href="../shared/ui.css" />
+    <link rel="stylesheet" href="manager.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="top">
+        <div class="brand-wrap">
+          <img src="../icons/icon-32.png" width="28" height="28" alt="" />
+          <div>
+            <h1>AriaFox</h1>
+            <div id="connection" class="pill bad"><span class="icon-dot"></span> …</div>
+          </div>
+        </div>
+        <div id="speeds" class="speeds muted"></div>
+        <div class="top-actions">
+          <button class="btn" id="pause-all" type="button">Pause all</button>
+          <button class="btn" id="resume-all" type="button">Resume all</button>
+          <button class="btn btn-primary" id="add" type="button">Add</button>
+          <button class="btn btn-ghost" id="settings" type="button">Settings</button>
+        </div>
+      </header>
+      <nav class="tabs" id="tabs">
+        <button type="button" data-queue="active" class="on">Active</button>
+        <button type="button" data-queue="waiting">Waiting</button>
+        <button type="button" data-queue="stopped">Stopped</button>
+      </nav>
+      <div class="layout">
+        <main id="list" class="list"></main>
+        <aside id="detail" class="detail" hidden></aside>
+      </div>
+    </div>
+    <dialog id="add-dialog">
+      <form id="add-form" method="dialog">
+        <h2>Add download</h2>
+        <label>
+          URLs or magnet links
+          <textarea id="add-urls" rows="6" placeholder="https://&#10;magnet:?"></textarea>
+        </label>
+        <label>
+          Torrent file
+          <input id="add-torrent" type="file" accept=".torrent,application/x-bittorrent" />
+        </label>
+        <label>
+          Filename (optional)
+          <input id="add-out" type="text" autocomplete="off" />
+        </label>
+        <p id="add-error" class="error" hidden></p>
+        <div class="row dialog-actions">
+          <button class="btn" id="add-cancel" type="button" value="cancel">Cancel</button>
+          <button class="btn btn-primary" id="add-submit" type="submit">Start download</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="manager.js"></script>
+  </body>
+</html>

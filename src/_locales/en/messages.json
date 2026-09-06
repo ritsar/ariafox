@@ -1,0 +1,8 @@
+{
+  "extName": { "message": "AriaFox" },
+  "extDescription": {
+    "message": "Send Firefox downloads to aria2 and manage them in the browser."
+  },
+  "cmdToggleCapture": { "message": "Toggle download capture" },
+  "cmdOpenManager": { "message": "Open AriaFox manager" }
+}

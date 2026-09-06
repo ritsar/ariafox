@@ -1,0 +1,69 @@
+body {
+  background:
+    radial-gradient(500px 220px at 80% -20%, rgb(234 88 12 / 18%), transparent 55%),
+    var(--bg);
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+header p { margin: 4px 0 0; }
+
+section {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+section h2 { font-size: 16px; margin-bottom: 12px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+label { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+
+input, select, textarea {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  padding: 8px 10px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  color: var(--text);
+}
+
+.check input { width: auto; }
+
+.warn {
+  background: var(--accent-soft);
+  color: var(--warn);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.row { margin-top: 12px; }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+}

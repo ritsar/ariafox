@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AriaFox settings</title>
+    <link rel="stylesheet" href="../shared/ui.css" />
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <img src="../icons/icon-48.png" width="40" height="40" alt="" />
+        <div>
+          <h1>AriaFox</h1>
+          <p class="muted">This add-on does not include aria2. Point it at a JSON-RPC server.</p>
+        </div>
+      </header>
+
+      <form id="form">
+        <section>
+          <h2>RPC server</h2>
+          <div class="grid">
+            <label>Profile name <input name="name" type="text" required /></label>
+            <label>Protocol
+              <select name="protocol">
+                <option value="http">http</option>
+                <option value="https">https</option>
+              </select>
+            </label>
+            <label>Host <input name="host" type="text" required /></label>
+            <label>Port <input name="port" type="number" min="1" max="65535" required /></label>
+            <label>RPC path <input name="path" type="text" required /></label>
+            <label>Secret <input name="secret" type="password" autocomplete="off" /></label>
+          </div>
+          <p id="insecure" class="warn" hidden></p>
+          <div class="row">
+            <button class="btn" id="test" type="button">Test connection</button>
+            <span id="test-result" class="muted"></span>
+          </div>
+        </section>
+
+        <section>
+          <h2>Download capture</h2>
+          <p class="muted">When capture is on, AriaFox cancels the Firefox download and sends the URL to your aria2 server. Firefox may ask for access to all websites — that is for cookies on those files, not for reading tabs.</p>
+          <label class="check"><input name="captureEnabled" type="checkbox" /> Send browser downloads to aria2</label>
+          <p id="capture-perm" class="muted"></p>
+          <label class="check"><input name="capturePdf" type="checkbox" /> Capture PDFs</label>
+          <label class="check"><input name="capturePrivate" type="checkbox" /> Capture in private windows</label>
+          <label class="check"><input name="torrentUpload" type="checkbox" /> Upload .torrent file bytes to aria2</label>
+          <label>Skip files smaller than (bytes)
+            <input name="minSizeBytes" type="number" min="0" />
+          </label>
+          <label>Skip file extensions (comma-separated)
+            <input name="excludeExtensions" type="text" />
+          </label>
+          <label>Skip URL patterns (one glob per line)
+            <textarea name="excludeUrlGlobs" rows="3"></textarea>
+          </label>
+          <label>Skip page (referrer) patterns
+            <textarea name="excludePageGlobs" rows="3"></textarea>
+          </label>
+        </section>
+
+        <section>
+          <h2>Notifications</h2>
+          <label class="check"><input name="notifyCapture" type="checkbox" /> Notify when a download is captured</label>
+          <label class="check"><input name="notifyErrors" type="checkbox" /> Notify on capture or RPC errors</label>
+        </section>
+
+        <div class="row">
+          <button class="btn btn-primary" type="submit">Save</button>
+          <span id="save-result" class="muted"></span>
+        </div>
+      </form>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
