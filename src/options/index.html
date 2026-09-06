@@ -19,13 +19,19 @@
 
       <form id="form">
         <section>
-          <h2>RPC servers</h2>
-          <p class="muted">Captured downloads go to the active server, chosen in the manager dropdown. Up to 5 servers.</p>
+          <h2>RPC Server Connections</h2>
+          <p class="muted">Captured downloads go to the active server, chosen in the manager dropdown.</p>
           <div id="servers"></div>
           <div class="row">
             <button class="btn" id="add-server" type="button">Add server</button>
             <span id="add-server-note" class="muted"></span>
           </div>
+        </section>
+
+        <section id="aria2-section">
+          <h2>Server Settings</h2>
+          <p class="muted">These live on the aria2 process, not in the add-on. Speed limits are in MiB/s; 0 means unlimited.</p>
+          <div id="aria2-panels"></div>
         </section>
 
         <section>

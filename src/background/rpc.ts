@@ -119,6 +119,14 @@ export class Aria2Client {
     return this.call<Aria2GlobalStat>("aria2.getGlobalStat");
   }
 
+  getGlobalOption() {
+    return this.call<Record<string, string>>("aria2.getGlobalOption");
+  }
+
+  changeGlobalOption(options: Record<string, string>) {
+    return this.call("aria2.changeGlobalOption", [options]);
+  }
+
   addUri(
     uris: string[],
     options: Record<string, string | string[]> = {},

@@ -1,6 +1,12 @@
 import { t } from "../shared/messages.js";
 import { sendMessage } from "../shared/messaging.js";
 import {
+  GLOBAL_OPTION_GROUPS,
+  readOptionForm,
+  renderOptionGroups,
+  validateOptionForm,
+} from "../shared/aria2-options.js";
+import {
   DEFAULT_PROFILE,
   MAX_PROFILES,
   isLoopbackHost,
@@ -17,6 +23,7 @@ const saveResult = document.querySelector("#save-result")!;
 const capturePerm = document.querySelector<HTMLElement>("#capture-perm")!;
 const captureEnabledEl = () =>
   (form.elements as unknown as Record<string, HTMLInputElement>).captureEnabled;
+const aria2Panels = document.querySelector("#aria2-panels")!;
 
 let settings: Settings | null = null;
 
@@ -113,6 +120,81 @@ function renderServers(profiles: RpcProfile[]): void {
   addServerBtn.disabled = profiles.length >= MAX_PROFILES;
   addServerNote.textContent =
     profiles.length >= MAX_PROFILES ? t("maxServers") : "";
+  renderAria2Panels(profiles);
+}
+
+function renderAria2Panel(profile: RpcProfile): string {
+  const name = profile.name.trim() || "Server";
+  return `<details class="server-settings" data-id="${escapeAttr(profile.id)}">
+    <summary>${escapeAttr(name)}</summary>
+    <div class="server-settings-body">
+      <p class="aria2-status muted"></p>
+      <div class="aria2-fields"></div>
+      <div class="row">
+        <button class="btn btn-primary" data-action="aria2-apply" type="button">${t("applyAria2")}</button>
+        <button class="btn" data-action="aria2-reload" type="button">${t("reloadAria2")}</button>
+        <span class="aria2-result muted"></span>
+      </div>
+    </div>
+  </details>`;
+}
+
+function renderAria2Panels(profiles: RpcProfile[]): void {
+  const openIds = new Set(
+    [...aria2Panels.querySelectorAll<HTMLDetailsElement>("details[open]")].map(
+      (el) => el.dataset.id,
+    ),
+  );
+  aria2Panels.innerHTML = profiles.map(renderAria2Panel).join("");
+  for (const details of aria2Panels.querySelectorAll("details.server-settings")) {
+    const panel = details as HTMLDetailsElement;
+    if (!openIds.has(panel.dataset.id)) continue;
+    panel.open = true;
+    void loadAria2Panel(panel);
+  }
+}
+
+function profileForPanel(panel: HTMLDetailsElement): RpcProfile | null {
+  const id = panel.dataset.id;
+  const card = [...serversEl.querySelectorAll(".server-card")].find(
+    (el) => (el as HTMLElement).dataset.id === id,
+  );
+  if (card) return readCard(card);
+  return settings?.profiles.find((profile) => profile.id === id) ?? null;
+}
+
+async function loadAria2Panel(panel: HTMLDetailsElement): Promise<void> {
+  const profile = profileForPanel(panel);
+  const status = panel.querySelector<HTMLElement>(".aria2-status")!;
+  const fields = panel.querySelector(".aria2-fields")!;
+  const apply = panel.querySelector<HTMLButtonElement>("[data-action='aria2-apply']")!;
+  const result = panel.querySelector(".aria2-result")!;
+  const token = String((Number(panel.dataset.loadId) || 0) + 1);
+  panel.dataset.loadId = token;
+  result.textContent = "";
+  fields.innerHTML = "";
+  if (!profile) {
+    status.textContent = t("aria2Disconnected");
+    apply.disabled = true;
+    return;
+  }
+  status.textContent = "…";
+  apply.disabled = true;
+  try {
+    const options = await sendMessage<Record<string, string>>({
+      type: "getGlobalOption",
+      profile,
+    });
+    if (panel.dataset.loadId !== token) return;
+    fields.innerHTML = renderOptionGroups(GLOBAL_OPTION_GROUPS, options);
+    status.textContent = "";
+    apply.disabled = false;
+  } catch (error) {
+    if (panel.dataset.loadId !== token) return;
+    status.textContent =
+      error instanceof Error ? error.message : t("aria2Disconnected");
+    apply.disabled = true;
+  }
 }
 
 function fill(next: Settings): void {
@@ -218,8 +300,15 @@ async function persist(next: Settings): Promise<void> {
 }
 
 form.addEventListener("input", (event) => {
-  const card = (event.target as HTMLElement).closest(".server-card");
+  const target = event.target as HTMLElement;
+  const card = target.closest(".server-card");
   if (card) updateCardWarnings(card);
+  if (target.closest("[data-field='name']") && card) {
+    const id = (card as HTMLElement).dataset.id;
+    const summary = aria2Panels.querySelector(`details[data-id="${id}"] > summary`);
+    const name = (target as HTMLInputElement).value.trim() || "Server";
+    if (summary) summary.textContent = name;
+  }
 });
 
 form.addEventListener("submit", (event) => {
@@ -278,3 +367,49 @@ serversEl.addEventListener("click", (event) => {
 });
 
 void sendMessage<Settings>({ type: "getSettings" }).then(fill);
+
+aria2Panels.addEventListener(
+  "toggle",
+  (event) => {
+    const panel = event.target;
+    if (!(panel instanceof HTMLDetailsElement) || !panel.open) return;
+    const fields = panel.querySelector(".aria2-fields");
+    if (fields && fields.childElementCount > 0) return;
+    void loadAria2Panel(panel);
+  },
+  true,
+);
+
+aria2Panels.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement;
+  const action = target.closest<HTMLElement>("[data-action]")?.dataset.action;
+  const panel = target.closest<HTMLDetailsElement>("details.server-settings");
+  if (!action || !panel) return;
+  if (action === "aria2-reload") {
+    void loadAria2Panel(panel);
+    return;
+  }
+  if (action === "aria2-apply") {
+    const profile = profileForPanel(panel);
+    const fields = panel.querySelector(".aria2-fields");
+    const result = panel.querySelector(".aria2-result")!;
+    if (!profile || !fields) return;
+    const invalid = validateOptionForm(fields);
+    if (invalid) {
+      result.textContent = invalid;
+      return;
+    }
+    result.textContent = "…";
+    void sendMessage({
+      type: "changeGlobalOption",
+      options: readOptionForm(fields),
+      profile,
+    })
+      .then(() => {
+        result.textContent = t("saved");
+      })
+      .catch((error: unknown) => {
+        result.textContent = error instanceof Error ? error.message : String(error);
+      });
+  }
+});

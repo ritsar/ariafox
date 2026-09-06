@@ -83,6 +83,11 @@ const en = {
   addServer: "Add server",
   removeServer: "Remove",
   maxServers: "Maximum of 5 servers.",
+  serverSettingsHint:
+    "These live on the aria2 process, not in the add-on. Speed limits are in MiB/s; 0 means unlimited.",
+  applyAria2: "Apply to aria2",
+  reloadAria2: "Reload",
+  aria2Disconnected: "Could not load options from this server.",
 } as const;
 
 export type MessageKey = keyof typeof en;

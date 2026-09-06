@@ -140,7 +140,9 @@ export type ExtensionMessage =
   | { type: "addTorrent"; data: string }
   | { type: "retry"; gid: string }
   | { type: "tellStatus"; gid: string }
-  | { type: "openManager"; hash?: string };
+  | { type: "openManager"; hash?: string }
+  | { type: "getGlobalOption"; profile?: RpcProfile }
+  | { type: "changeGlobalOption"; options: Record<string, string>; profile?: RpcProfile };
 
 export type ExtensionResponse<T = unknown> =
   | { ok: true; data: T }

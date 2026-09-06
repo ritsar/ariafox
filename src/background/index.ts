@@ -245,6 +245,18 @@ async function handleMessage(
       return refreshSnapshot();
     case "tellStatus":
       return client.tellStatus(message.gid);
+    case "getGlobalOption": {
+      const rpc = message.profile ? clientFor(message.profile) : client;
+      return rpc.getGlobalOption();
+    }
+    case "changeGlobalOption": {
+      const rpc = message.profile ? clientFor(message.profile) : client;
+      await rpc.changeGlobalOption(message.options);
+      if (!message.profile || message.profile.id === settings.activeProfileId) {
+        return refreshSnapshot();
+      }
+      return rpc.getGlobalOption();
+    }
     case "openManager":
       await openManager(message.hash ?? "");
       return null;
