@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
 const watch = process.argv.includes("--watch");
+const sourcemap = watch || process.argv.includes("--sourcemap");
 
 function copyStatic() {
   mkdirSync(join(dist, "popup"), { recursive: true });
@@ -23,6 +24,7 @@ function copyStatic() {
   cpSync(join(root, "src/manager/manager.css"), join(dist, "manager/manager.css"));
   cpSync(join(root, "src/options/index.html"), join(dist, "options/index.html"));
   cpSync(join(root, "src/options/options.css"), join(dist, "options/options.css"));
+  cpSync(join(root, "assets/logo.svg"), join(dist, "manager/logo.svg"));
   cpSync(join(root, "assets/icons"), join(dist, "icons"), { recursive: true });
 }
 
@@ -38,7 +40,7 @@ const buildOptions = {
   bundle: true,
   format: "esm",
   target: ["firefox128"],
-  sourcemap: true,
+  sourcemap,
   logLevel: "info",
 };
 

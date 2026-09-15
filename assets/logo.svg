@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="230 440 500 500">
+  <path d="M240 480 L240 720 L480 900 L720 720 L720 480 L540 600 L420 600 Z" fill="#e8763b" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M240 480 L339 654 L420 600 Z" fill="#fbf7f0" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M339 654 L240 720 L480 900 Z" fill="#fbf7f0" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M720 480 L621 654 L540 600 Z" fill="#fbf7f0" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M621 654 L720 720 L480 900 Z" fill="#fbf7f0" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M240 480 L480 900 L720 480" fill="none" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M240 720 L420 600" fill="none" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M540 600 L720 720" fill="none" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M450 600 L450 690 L420 690 L480 750 L540 690 L510 690 L510 600 Z" fill="#4fd9c7" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M450 600 L510 600" fill="none" stroke="#2b1b12" stroke-width="3" stroke-linejoin="round"/>
+</svg>

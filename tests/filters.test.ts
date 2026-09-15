@@ -23,7 +23,7 @@ const capture = {
 };
 
 test("captures a normal zip", () => {
-  assert.equal(skipReason(base, capture, "ariafox@local"), null);
+  assert.equal(skipReason(base, capture, "@ariafox"), null);
 });
 
 test("skips when capture is off", () => {

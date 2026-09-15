@@ -110,7 +110,6 @@ async function notify(
   try {
     await browser.notifications.create({
       type: "basic",
-      iconUrl: browser.runtime.getURL("icons/icon-48.png"),
       title: t("extName"),
       message,
     });

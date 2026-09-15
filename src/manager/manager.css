@@ -27,6 +27,12 @@ body {
   align-items: center;
 }
 
+.brand-wrap img {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
 .brand-wrap h1 { font-size: 20px; }
 
 .speeds { margin-left: auto; font-variant-numeric: tabular-nums; }

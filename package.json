@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "start": "npm run build && web-ext run -s dist --firefox /usr/bin/librewolf",
     "lint": "npm run build && web-ext lint -s dist",
-    "test": "node --experimental-strip-types --test tests/*.test.ts"
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "package": "npm run build && web-ext build -s dist",
+    "source-zip": "mkdir -p .web-ext-artifacts && git archive --format=zip --output=.web-ext-artifacts/ariafox-source.zip HEAD"
   },
   "devDependencies": {
     "@types/firefox-webext-browser": "^143.0.0",
@@ -20,5 +22,10 @@
   },
   "allowScripts": {
     "esbuild@0.28.2": true
+  },
+  "webExt": {
+    "sourceDir": "dist",
+    "artifactsDir": ".web-ext-artifacts",
+    "ignoreFiles": ["**/*.map"]
   }
 }

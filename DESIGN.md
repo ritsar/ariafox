@@ -37,7 +37,7 @@ The repo folder is still `ariang-firefox`. Rename it when the name sticks. The a
 | **Haul** | `haul` | Same metaphor | Generic; trademark-ish |
 | **Keel** | `keel` | Engine under the browser | Cute, unexplained |
 
-**Recommendation: AriaFox.** Display name `AriaFox`, AMO slug `ariafox`, gecko id `ariafox@addons.mozilla.org` (or a domain you control). Description line: “Send Firefox downloads to aria2 and manage them in the browser.”
+**Recommendation: AriaFox.** Display name `AriaFox`, AMO slug `ariafox`, gecko id `@ariafox`. Description line: “Send Firefox downloads to aria2 and manage them in the browser.”
 
 Credit AriaNg in the README as inspiration, not as a bundled product.
 
@@ -156,7 +156,6 @@ ariafox/                          # rename from ariang-firefox
 ├── README.md
 ├── LICENSE
 ├── package.json
-├── web-ext.config.js
 ├── src/
 │   ├── background/
 │   │   ├── index.ts
@@ -173,7 +172,6 @@ ariafox/                          # rename from ariang-firefox
 │   │   ├── messages.ts           # English string table
 │   │   └── types.ts              # aria2 DTOs
 │   └── _locales/en/messages.json # extension chrome strings (toolbar title)
-└── assets/icons/
 ```
 
 `web-ext` (or WXT) compiles `src/` only. No `vendor/`.
@@ -259,7 +257,7 @@ Not a second manager. ~360px:
 
 ### 9.4 Visual language
 
-Clean, dense, download-manager — not a clone of AriaNg’s Bootstrap theme and not a Firefox Settings clone. Dark/light. Icon: simple fox + down arrow or a geometric “A” — distinct from AriaNg’s logo.
+Clean, dense, download-manager — not a clone of AriaNg’s Bootstrap theme and not a Firefox Settings clone. Dark/light. Logo on the manager header and AMO listing only.
 
 ---
 
@@ -311,7 +309,7 @@ No blocking `webRequest` in v1.
   "version": "1.0.0",
   "browser_specific_settings": {
     "gecko": {
-      "id": "ariafox@addons.mozilla.org",
+      "id": "@ariafox",
       "strict_min_version": "128.0"
     }
   },
@@ -395,7 +393,7 @@ About page: MIT license, “inspired by AriaNg, not affiliated.”
 
 ### Phase 0 — scaffolding
 
-Manifest, TS build, `web-ext run`, icons, English string table, settings types, RPC `getVersion` from options.
+Manifest, TS build, `web-ext run`, English string table, settings types, RPC `getVersion` from options.
 
 **Exit:** options page talks to local aria2.
 
